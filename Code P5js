@@ -1,0 +1,136 @@
+let isDay = true; // Status awal siang
+let changeInterval = 300; // Interval waktu dalam frame (misal, 5 detik jika frameRate 60)
+
+function setup() {
+  createCanvas(600, 400);
+  frameRate(60); // Set frame rate ke 60 FPS
+}
+
+function draw() {
+  // Pergantian siang dan malam berdasarkan frameCount
+  if (frameCount % changeInterval === 0) {
+    isDay = !isDay; // Balikkan status siang/malam
+  }
+  drawScene(); // Panggil fungsi untuk menggambar scene
+}
+
+function drawScene() {
+  // Tentukan warna latar berdasarkan siang atau malam
+  if (isDay) {
+    background(135, 206, 235); // Langit biru muda untuk siang
+  } else {
+    background(25, 25, 112); // Langit gelap untuk malam
+  }
+
+  // Matahari atau Bulan
+  if (isDay) {
+    fill(255, 223, 0); // Warna matahari kuning
+    ellipse(width / 2, 80, 80, 80); // Matahari di tengah atas
+  } else {
+    fill(255, 255, 204); // Warna bulan pucat
+    ellipse(width / 2, 80, 60, 60); // Bulan lebih kecil dari matahari
+    drawStars(); // Tambahkan bintang di malam hari
+  }
+
+  // Gunung kiri
+  fill(160, 82, 45);
+  triangle(150, 300, 300, 100, 450, 300); // Gunung besar
+  triangle(100, 300, 200, 160, 300, 300); // Gunung kecil di kiri
+
+  // Gunung kanan
+  triangle(300, 300, 400, 160, 500, 300); // Gunung kecil di kanan
+  triangle(250, 300, 400, 100, 550, 300); // Gunung besar
+
+  // Jalan
+  fill(105, 105, 105);
+  beginShape();
+  vertex(280, 300);
+  vertex(440, 300);
+  vertex(430, height);
+  vertex(210, height);
+  endShape(CLOSE);
+
+  // Awan (hanya tampil saat siang)
+  if (isDay) {
+    fill(255);
+    ellipse(120, 100, 60, 40);
+    ellipse(150, 90, 50, 30);
+    ellipse(180, 100, 60, 40);
+
+    ellipse(400, 60, 60, 40);
+    ellipse(430, 50, 50, 30);
+    ellipse(460, 60, 60, 40);
+  }
+
+  // Pohon
+  drawTrees();
+
+  // Lampu jalan (hanya menyala di malam hari)
+  drawStreetLamps();
+
+  // Burung
+  stroke(0);
+  strokeWeight(2);
+  noFill();
+  drawBirds();
+}
+
+function drawBirds() {
+  // Burung pertama
+  beginShape();
+  vertex(200, 150);
+  vertex(210, 140);
+  vertex(220, 150);
+  endShape();
+
+  // Burung kedua
+  beginShape();
+  vertex(250, 170);
+  vertex(260, 160);
+  vertex(270, 170);
+  endShape();
+}
+
+function drawStars() {
+  // Gambar bintang secara acak
+  fill(255);
+  noStroke();
+  for (let i = 0; i < 50; i++) {
+    let x = random(width);
+    let y = random(height / 2); // Bintang hanya di setengah atas layar
+    ellipse(x, y, 2, 2);
+  }
+}
+
+function drawTrees() {
+  // Pohon sederhana
+  fill(139, 69, 19); // Warna batang pohon
+  rect(130, 250, 10, 50); // Batang pohon
+  rect(170, 270, 10, 50); // Batang pohon
+  rect(450, 280, 10, 50); // Batang pohon
+
+  fill(34, 139, 34); // Warna daun pohon
+  ellipse(135, 240, 40, 40); // Daun pohon
+  ellipse(175, 260, 40, 40); // Daun pohon
+  ellipse(455, 270, 40, 40); // Daun pohon
+}
+
+function drawStreetLamps() {
+  // Lampu jalan di sisi kiri dan kanan jalan
+  for (let i = 0; i < 3; i++) {
+    let xLeft = 240 - i * 40; // Posisi lampu di sisi kiri jalan
+    let xRight = 460 + i * 40; // Posisi lampu di sisi kanan jalan
+
+    // Lampu di sisi kiri jalan
+    fill(160, 160, 160);
+    rect(xLeft, 280, 5, 50); // Tiang lampu
+    fill(isDay ? 220 : 255, 255, 0, isDay ? 50 : 150); // Cahaya lampu
+    ellipse(xLeft + 2.5, 280, 20, 20); // Cahaya lampu
+
+    // Lampu di sisi kanan jalan
+    fill(160, 160, 160);
+    rect(xRight, 280, 5, 50); // Tiang lampu
+    fill(isDay ? 220 : 255, 255, 0, isDay ? 50 : 150); // Cahaya lampu
+    ellipse(xRight + 2.5, 280, 20, 20); // Cahaya lampu
+  }
+}
